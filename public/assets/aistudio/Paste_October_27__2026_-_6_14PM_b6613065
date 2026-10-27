@@ -1,0 +1,837 @@
+# TASKDO — FRONTEND IMPLEMENTATION & UI/UX INSTRUCTIONS
+
+## 1. ROLE AND OBJECTIVE
+
+Act as a senior frontend engineer, UI/UX designer, design-system architect, accessibility specialist, and React application architect.
+
+Your task is to implement the complete TaskDo frontend based on the product requirements, architecture, workflows, and storage strategy described in the provided project specification.
+
+TaskDo is a modern, extensible task management application designed to work with multiple storage providers, support offline-first usage, and remain adaptable to future web, Android, iOS, and desktop applications.
+
+Do not build a generic to-do list or a static dashboard mockup.
+
+Build a cohesive, functional, responsive, production-quality user interface that communicates the application's capabilities and makes complex configuration accessible to nontechnical users.
+
+The provided product specification is the source of truth for product behavior and architecture. These instructions define how that specification must be translated into the frontend.
+
+## 2. CORE REQUIREMENTS
+
+The implementation must satisfy these requirements:
+
+- Support Arabic (AR) and English (EN) throughout the entire application.
+- Arabic must be the default language for first-time users.
+- Use Cairo as the primary interface font.
+- Follow a modern, polished, responsive visual design.
+- Use the specified color palette consistently.
+- Provide functional pages, interactions, forms, navigation, and application states.
+- Support the Setup Wizard for configuring application mode and storage providers.
+- Separate presentation components from application logic and storage implementations.
+- Support local-first usage without requiring a backend account.
+- Never assume that GitHub Pages can run a custom backend.
+- Remain compatible with static deployment when the selected configuration supports it.
+- Keep the frontend independent of any single database provider.
+- Provide accessible controls, keyboard navigation, and clear feedback.
+- Avoid fake functionality, dead buttons, placeholder interactions, and misleading success messages.
+
+## 3. TECHNOLOGY AND IMPLEMENTATION RULES
+
+Follow the existing repository structure and installed dependencies before introducing new tools.
+
+Use the following technology choices when creating or extending the project:
+
+- React for the user interface.
+- Vite for development and static production builds.
+- TypeScript with strict type checking.
+- Tailwind CSS for styling.
+- shadcn/ui for reusable accessible interface primitives.
+- Lucide React for consistent interface icons.
+- Cairo for Arabic-first typography.
+- React Router or the router already established in the repository, if routing is required.
+- Dexie.js with IndexedDB for structured local persistence when the local storage adapter is implemented.
+
+Use additional libraries only when they provide a clear benefit and integrate cleanly with the existing architecture.
+
+Do not replace existing project dependencies, framework conventions, or working implementations without a clear technical reason.
+
+Do not introduce unnecessary dependencies simply to implement basic UI behavior.
+
+## 4. VISUAL IDENTITY AND DESIGN SYSTEM
+
+### Color palette
+
+Use these exact brand colors:
+
+- Primary dark: `#264653`
+- Primary accent: `#2a9d8f`
+- Highlight: `#e9c46a`
+- Warm accent: `#f4a261`
+- Coral accent: `#e76f51`
+
+Establish semantic design tokens rather than scattering raw hexadecimal values throughout components.
+
+Recommended token mapping:
+
+- Primary: `#264653`
+- Primary foreground: `#ffffff`
+- Secondary: `#2a9d8f`
+- Success: `#2a9d8f`
+- Warning: `#e9c46a`
+- Attention: `#f4a261`
+- Destructive: `#e76f51`
+- Main background: a light neutral derived from the brand palette
+- Surface: white or a theme-appropriate neutral
+- Main text: a dark, accessible neutral
+- Muted text: a readable gray
+- Border: a subtle neutral
+
+Treat the palette as a coordinated design system, not a requirement to display all five colors equally.
+
+Use the dark primary color for navigation, headings, and important structural elements. Use teal for primary actions and active states. Reserve yellow, orange, and coral for meaningful highlights, warnings, priorities, and status indicators.
+
+Verify text contrast and never rely on color alone to communicate task status or validation errors.
+
+### Typography
+
+Use Cairo as the primary font for both Arabic and English.
+
+Define a consistent typography scale for:
+
+- Page titles
+- Section headings
+- Card headings
+- Body text
+- Supporting text
+- Form labels
+- Buttons
+- Navigation items
+- Metadata and timestamps
+
+Use appropriate font weights and line heights for Arabic readability.
+
+Load the font efficiently, preferably using a reliable local font asset or an appropriate font delivery strategy. Provide a suitable fallback font.
+
+Avoid excessive font sizes, cramped Arabic text, and inconsistent typography between pages.
+
+### Visual style
+
+The design should feel modern, calm, organized, and premium.
+
+Use:
+
+- Clear visual hierarchy.
+- Consistent spacing and alignment.
+- Subtle borders and restrained shadows.
+- Carefully balanced corner radii.
+- Well-designed empty states.
+- Clean data presentation.
+- Consistent iconography.
+- Subtle transitions and meaningful micro-interactions.
+- Responsive layouts that preserve usability on small screens.
+
+Avoid:
+
+- Excessive gradients.
+- Glassmorphism everywhere.
+- Overuse of colorful cards.
+- Unnecessary decorative elements.
+- Excessive pill-shaped containers.
+- Inconsistent border radii.
+- Huge empty spaces.
+- Dense, cramped layouts.
+- Overuse of animations.
+- Generic dashboard templates that ignore the product's actual workflows.
+
+The interface must prioritize clarity and productivity over visual decoration.
+
+## 5. INTERNATIONALIZATION: AR AND EN
+
+Arabic is the default language.
+
+On a fresh installation, the application must initialize in Arabic unless a different language has been explicitly selected through a valid user configuration.
+
+English must be available through a visible language selector.
+
+Use a proper internationalization architecture rather than duplicating entire pages.
+
+Requirements:
+
+1. Store all interface strings in translation dictionaries.
+2. Separate translations from business logic.
+3. Support dynamic interpolation and pluralization where needed.
+4. Translate navigation, buttons, labels, tooltips, dialogs, validation errors, notifications, empty states, and accessibility labels.
+5. Format dates, times, numbers, and relative timestamps according to the selected locale.
+6. Ensure all dynamically generated messages respect the active language.
+7. Keep the selected language consistent throughout navigation and application sessions.
+8. Do not hardcode user-facing text inside components.
+9. Avoid machine-translated placeholder text or mixed-language interfaces.
+
+### RTL and LTR behavior
+
+When Arabic is selected:
+
+- Set the document language to `ar`.
+- Set the document direction to `rtl`.
+- Use right-to-left navigation and layout conventions.
+- Align Arabic text appropriately.
+- Ensure icons, dropdowns, sidebars, breadcrumbs, and directional controls behave correctly.
+- Use logical CSS properties such as `margin-inline-start`, `padding-inline-end`, and `inset-inline-start`.
+- Ensure forms and task metadata follow a natural reading order.
+
+When English is selected:
+
+- Set the document language to `en`.
+- Set the document direction to `ltr`.
+- Restore the corresponding layout and alignment.
+
+Use the document's `lang` and `dir` attributes as the source of truth for global layout direction.
+
+Use CSS logical properties and direction-aware components rather than maintaining two unrelated stylesheets.
+
+Do not reverse every icon indiscriminately. Only mirror icons whose meaning depends on direction.
+
+Ensure mixed-direction content, such as URLs, email addresses, code snippets, and database identifiers, remains readable using appropriate bidirectional isolation.
+
+## 6. APPLICATION LAYOUT AND NAVIGATION
+
+Create a consistent application shell that adapts to desktop, tablet, and mobile screens.
+
+### Desktop layout
+
+Use a well-proportioned dashboard layout with:
+
+- A navigation sidebar.
+- A clear application identity and logo area.
+- A primary content region.
+- A contextual page header.
+- Quick actions where appropriate.
+- A language selector.
+- Access to settings and storage configuration.
+- A consistent notification and feedback mechanism.
+
+The sidebar should be collapsible when doing so improves usability.
+
+### Mobile layout
+
+On smaller screens:
+
+- Replace the desktop sidebar with a mobile-friendly navigation pattern.
+- Consider a bottom navigation bar for the most frequently used destinations.
+- Keep secondary destinations accessible through a menu.
+- Avoid horizontal overflow.
+- Ensure touch targets are sufficiently large.
+- Make dialogs, forms, and task editors usable on narrow screens.
+- Keep important actions reachable without awkward scrolling.
+
+Use a single coherent navigation system across breakpoints.
+
+### Main navigation
+
+Implement navigation for the following product areas:
+
+- Dashboard
+- My Tasks
+- Projects
+- Calendar
+- Settings
+
+Include additional destinations only when supported by the actual product scope.
+
+The navigation must indicate the active destination clearly and preserve a consistent experience across all pages.
+
+## 7. REQUIRED PAGES AND USER INTERFACES
+
+### A. Dashboard
+
+Create a useful overview of the user's tasks and projects.
+
+Include:
+
+- A personalized page heading.
+- A concise summary of outstanding tasks.
+- Completed and overdue task indicators.
+- Tasks due today.
+- Upcoming deadlines.
+- Recent projects or project progress.
+- Quick task creation.
+- Useful shortcuts to relevant views.
+
+Only display metrics that can be derived from actual application data.
+
+Use lightweight visual summaries where they improve understanding.
+
+Avoid filling the dashboard with meaningless charts or fabricated statistics.
+
+Provide loading, empty, populated, and error states.
+
+### B. My Tasks
+
+Build a complete task management interface.
+
+Support the following capabilities where the application domain and data model provide them:
+
+- Create tasks.
+- Edit task details.
+- Mark tasks as complete or incomplete.
+- Delete tasks with appropriate confirmation.
+- Set due dates.
+- Assign priorities.
+- Organize tasks by project.
+- Filter tasks by status, priority, project, or deadline.
+- Search tasks.
+- Sort tasks.
+- Switch between useful list and board-style views when implemented.
+- View task details.
+- Provide contextual actions.
+
+Use a shared task editor for creating and editing tasks.
+
+Implement proper form validation and helpful error messages.
+
+Task completion should provide immediate, clear feedback.
+
+Support keyboard interaction and accessible task controls.
+
+Never show a successful save notification before the storage operation has actually succeeded.
+
+### C. Projects
+
+Provide a project management interface with:
+
+- A project list or grid.
+- Project creation and editing.
+- Project descriptions.
+- Task counts and completion progress.
+- Project-specific task views.
+- Clear empty states.
+- Project deletion safeguards.
+
+Use actual task data to calculate progress.
+
+Maintain consistent relationships between projects and their associated tasks.
+
+Do not silently discard tasks when a project is deleted. Follow a clearly defined deletion policy and communicate the consequences before confirming destructive actions.
+
+### D. Calendar
+
+Create a calendar interface for viewing scheduled tasks.
+
+Provide appropriate date navigation and clear visual differentiation between scheduled, completed, and overdue tasks.
+
+Ensure the calendar respects locale, time zone, week-start conventions, and text direction.
+
+Selecting a task should open its details or the appropriate editing interface.
+
+Calendar data must be derived from the configured storage provider.
+
+If advanced calendar interactions are not implemented, clearly limit the interaction rather than presenting nonfunctional drag-and-drop controls.
+
+### E. Settings
+
+Organize settings into understandable sections:
+
+- Appearance and theme.
+- Language.
+- Storage and data source.
+- Application mode.
+- Data management.
+- About and application information.
+
+Provide clear descriptions for technical options.
+
+Distinguish between changing the appearance of the interface and changing the underlying data provider.
+
+Changing a storage provider must never silently overwrite, delete, or abandon existing user data.
+
+Where appropriate, provide an explicit migration workflow with clear source and destination information.
+
+### F. Setup Wizard
+
+The Setup Wizard is a central product feature, not a decorative onboarding screen.
+
+Design it as a guided, accessible multi-step process.
+
+The wizard should help users choose:
+
+1. Where and how the application will run.
+2. Which storage provider will be used.
+3. Whether the application is intended for a single device, synchronized devices, or a shared team.
+4. Which configuration steps are required for the selected combination.
+
+Support the following execution environments:
+
+- GitHub Pages or another static host.
+- Local development.
+- Self-hosted deployment.
+
+Support the storage options described in the product specification:
+
+- IndexedDB using Dexie.js.
+- localStorage.
+- Supabase with PostgreSQL.
+- A self-hosted PostgreSQL backend.
+- An existing REST API.
+- Additional providers through the storage adapter architecture.
+
+Do not imply that every combination is technically compatible.
+
+For example:
+
+- A static GitHub Pages deployment can use local browser storage.
+- A remote database requires a compatible, securely configured API or backend.
+- PostgreSQL must not be accessed directly from browser code using database credentials.
+- A REST API integration must respect the actual API contract.
+- Shared team workspaces require appropriate authentication, authorization, and server-side data isolation.
+
+The wizard must dynamically display only the configuration steps applicable to the selected options.
+
+Include:
+
+- A clear progress indicator.
+- Back and next controls.
+- Input validation.
+- Configuration summaries.
+- Contextual explanations.
+- Connection testing when supported.
+- Loading and error states.
+- A final review step.
+- An explicit completion action.
+
+Persist configuration only when the corresponding operation is supported and succeeds.
+
+If a provider requires external setup, explain the required steps and provide accurate instructions.
+
+Never simulate a successful database connection, create imaginary credentials, or claim that remote database tables have been created when only a local configuration has been saved.
+
+## 8. STORAGE ARCHITECTURE AND FRONTEND BOUNDARIES
+
+The UI must not depend directly on a particular database implementation.
+
+Use the storage contract and adapter architecture defined by the project.
+
+A typical conceptual dependency structure is:
+
+React Components
+    ↓
+Application Services / Use Cases
+    ↓
+Storage Contracts
+    ↓
+Configured Storage Adapter
+
+The frontend must consume application services or a well-defined data-access layer.
+
+Components must not contain provider-specific database queries.
+
+Do not import Dexie, Supabase clients, or provider-specific SDKs directly into unrelated presentation components.
+
+Keep provider initialization, configuration validation, error normalization, and data access within their appropriate modules.
+
+### Storage provider behavior
+
+**IndexedDB / Dexie**
+
+- Support structured local persistence.
+- Provide the required database schema and versioned migrations.
+- Support offline usage where the rest of the application permits it.
+- Preserve user data across normal page reloads.
+
+**localStorage**
+
+- Use only for appropriately small, simple data sets.
+- Avoid treating it as equivalent to a relational database.
+- Handle serialization, validation, and storage errors.
+- Do not use it as the default for complex task and project relationships when IndexedDB is available.
+
+**Supabase**
+
+- Use the supported client/API integration.
+- Respect authentication, authorization, and Row Level Security.
+- Keep privileged server credentials out of the frontend.
+- Use version-controlled SQL migrations for database schema changes.
+- Do not claim to apply migrations unless an authorized, real operation has succeeded.
+
+**Self-hosted PostgreSQL**
+
+- Communicate through a compatible backend or API.
+- Never connect browser components directly to PostgreSQL.
+- Document the required backend configuration.
+
+**REST API**
+
+- Use the actual API contract.
+- Handle authentication, timeouts, network errors, and invalid responses.
+- Report unsupported operations clearly.
+- Do not assume that the API exposes database schema management endpoints.
+
+### Important distinction
+
+The frontend can provide configuration interfaces, validate inputs, initialize supported local storage, test supported connections, and invoke authorized APIs.
+
+It cannot independently execute arbitrary commands on the user's machine, create a remote database without the required infrastructure and permissions, or securely hold server-side secrets.
+
+Keep these limitations visible in the relevant setup screens and documentation.
+
+## 9. INTERACTION DESIGN
+
+Every visible interactive element must have a defined behavior.
+
+Implement:
+
+- Buttons with real actions.
+- Forms with validation.
+- Dialogs with proper dismissal behavior.
+- Dropdowns that work with mouse and keyboard.
+- Search fields with meaningful results.
+- Filters that update displayed data.
+- Sort controls that change ordering.
+- Tabs that switch content.
+- Navigation links that lead to real destinations.
+- Tooltips where they provide useful context.
+- Toast notifications for meaningful operation feedback.
+- Confirmation dialogs for destructive actions.
+
+Use optimistic UI updates only when the data layer supports them and failed operations can be rolled back reliably.
+
+Provide clear feedback for success, failure, and pending operations.
+
+Prevent duplicate submissions when appropriate.
+
+Avoid unnecessary confirmation dialogs for harmless actions.
+
+Use confirmation dialogs for irreversible or destructive operations.
+
+Never leave placeholder buttons or controls that appear functional but do nothing.
+
+If a capability depends on an unimplemented backend, present an honest disabled state or a clear setup requirement instead of simulating functionality.
+
+## 10. LOADING, EMPTY, ERROR, AND OFFLINE STATES
+
+Design all important states intentionally.
+
+### Loading
+
+Use appropriate skeletons, progress indicators, or local loading feedback.
+
+Avoid displaying misleading empty states while data is still loading.
+
+### Empty
+
+Explain what the user can do next.
+
+Provide relevant actions such as creating the first task or project.
+
+### Error
+
+Explain the problem in understandable language.
+
+Offer retry actions when appropriate.
+
+Do not expose database credentials, sensitive configuration, internal stack traces, or raw server errors to end users.
+
+### Offline
+
+Clearly communicate connection limitations when remote functionality is unavailable.
+
+Allow local operations when the selected adapter supports them.
+
+Do not claim synchronization has completed while changes remain pending.
+
+### Persistence
+
+After reloading the application, previously saved data must remain available according to the selected provider's capabilities.
+
+Storage failures must be surfaced rather than silently ignored.
+
+## 11. RESPONSIVE DESIGN
+
+Support a mobile-first responsive layout.
+
+Test at representative viewport widths:
+
+- Small mobile: 320–375 px.
+- Standard mobile: approximately 390–430 px.
+- Tablet: 768 px.
+- Laptop: 1024–1280 px.
+- Desktop: 1440 px and above.
+
+These are test targets, not rigid layout breakpoints.
+
+Requirements:
+
+- No unintended horizontal scrolling.
+- No clipped text or controls.
+- No overlapping navigation.
+- No inaccessible dialogs on mobile.
+- Properly wrapping Arabic and English text.
+- Responsive forms, tables, cards, and calendars.
+- Appropriate touch targets.
+- Readable spacing and typography across screen sizes.
+
+Use tables only where they are appropriate for the information being presented. Provide responsive alternatives when necessary.
+
+Do not simply shrink the desktop interface to fit a phone.
+
+## 12. ACCESSIBILITY
+
+Follow WCAG 2.2 AA principles where applicable.
+
+Implement:
+
+- Semantic HTML.
+- Correct heading hierarchy.
+- Explicit form labels.
+- Keyboard navigation.
+- Visible focus indicators.
+- Accessible dialog behavior.
+- Appropriate ARIA attributes when necessary.
+- Sufficient color contrast.
+- Screen-reader-friendly status messages.
+- Reduced-motion support.
+- Accessible icon buttons with meaningful labels.
+- Correct focus management after dialogs and navigation changes.
+
+Ensure the application remains usable without relying exclusively on color, hover, animation, or mouse interaction.
+
+## 13. MOTION AND MICRO-INTERACTIONS
+
+Use subtle motion to improve clarity and perceived responsiveness.
+
+Appropriate examples include:
+
+- Navigation state transitions.
+- Dialog entrance and exit.
+- Dropdown appearance.
+- Task completion feedback.
+- Small hover and focus transitions.
+- Progress indicators.
+- Skeleton loading transitions.
+
+Keep animations brief and restrained.
+
+Avoid excessive motion, distracting animated backgrounds, or effects that interfere with productivity.
+
+Respect the user's reduced-motion preference.
+
+## 14. COMPONENT ARCHITECTURE
+
+Build reusable components around clear responsibilities.
+
+Suggested shared components include:
+
+- ApplicationShell
+- Sidebar
+- MobileNavigation
+- PageHeader
+- LanguageSwitcher
+- ThemeSwitcher
+- TaskCard
+- TaskList
+- TaskForm
+- TaskDetails
+- ProjectCard
+- ProjectForm
+- CalendarView
+- SearchInput
+- FilterControls
+- EmptyState
+- LoadingState
+- ErrorState
+- ConfirmDialog
+- ToastProvider
+- SetupWizard
+- StorageProviderSelector
+- StorageConnectionForm
+- ConfigurationSummary
+
+These names are suggestions, not mandatory filenames.
+
+Avoid creating an excessively generic component system that makes simple interfaces difficult to implement.
+
+Reuse components when their behavior and design genuinely overlap.
+
+Keep complex business workflows out of presentation components.
+
+Separate reusable UI primitives from product-specific components and application services.
+
+## 15. CONFIGURATION AND PERSISTENCE SAFETY
+
+Treat configuration as structured, validated application data.
+
+Do not store server passwords, privileged database keys, or confidential credentials in public frontend bundles.
+
+Public browser configuration is not a secret.
+
+Do not commit real credentials into the repository.
+
+Provide appropriate example configuration files and clear setup documentation.
+
+When changing application configuration:
+
+- Validate the requested combination.
+- Explain incompatible options.
+- Preserve the previous valid configuration until the new one is accepted.
+- Avoid overwriting user data.
+- Make irreversible actions explicit.
+- Provide recovery guidance when appropriate.
+
+If provider switching requires data migration, treat it as a separate workflow rather than a simple dropdown change.
+
+## 16. GITHUB PAGES AND STATIC DEPLOYMENT
+
+The frontend must be capable of building for static deployment when the selected application configuration supports it.
+
+Verify the Vite production build and configure the appropriate base path for the intended GitHub Pages repository URL.
+
+Do not assume the application is hosted at the domain root.
+
+Verify that:
+
+- Static assets resolve correctly.
+- Fonts load correctly.
+- Navigation works after deployment.
+- Refreshing a route does not unexpectedly break navigation.
+- The production build contains no server-only dependencies.
+- No private credentials are included in generated assets.
+- The default local mode does not require a remote backend.
+
+Account for GitHub Pages limitations when choosing routing and deployment strategies.
+
+Do not claim that the frontend can execute a backend or run PostgreSQL merely because it has been deployed to GitHub Pages.
+
+## 17. PERFORMANCE AND CODE QUALITY
+
+Prioritize a fast, maintainable application.
+
+Implement:
+
+- Strict TypeScript typing.
+- Appropriate component boundaries.
+- Efficient state updates.
+- Stable list keys.
+- Sensible code splitting where useful.
+- Lazy loading for noncritical screens when appropriate.
+- Efficient filtering and searching.
+- Proper cleanup of subscriptions and event listeners.
+- Robust asynchronous error handling.
+- Minimal unnecessary re-rendering.
+- Correct production asset handling.
+
+Avoid:
+
+- Large monolithic components.
+- Duplicated business logic.
+- Excessive use of `any`.
+- Unnecessary global state.
+- Direct DOM manipulation when React provides a suitable solution.
+- Silent exception handling.
+- Unnecessary dependencies.
+- Dead code and abandoned mock implementations.
+
+Follow the repository's established linting, formatting, and testing conventions.
+
+## 18. IMPLEMENTATION WORKFLOW
+
+Before changing the code:
+
+1. Inspect the repository and its existing structure.
+2. Read the package configuration and existing project instructions.
+3. Identify the framework, dependencies, routing, styling system, and current implementation status.
+4. Review the product requirements and storage contracts.
+5. Identify missing features and incompatible assumptions.
+6. Establish the design tokens and internationalization approach.
+
+Then implement incrementally.
+
+### Phase 1 — Foundation
+
+- Establish the design system.
+- Configure Cairo.
+- Implement AR/EN translations.
+- Implement RTL/LTR switching.
+- Create the application shell.
+- Establish routing and shared components.
+
+### Phase 2 — Core interfaces
+
+- Implement the dashboard.
+- Implement task management.
+- Implement project management.
+- Implement the calendar.
+- Implement settings.
+
+### Phase 3 — Setup and storage configuration
+
+- Implement the Setup Wizard.
+- Add storage provider selection.
+- Add conditional configuration forms.
+- Connect the UI to the existing storage contracts.
+- Provide honest connection and migration states.
+
+### Phase 4 — Integration
+
+- Connect components to actual application services.
+- Verify persistence and data relationships.
+- Implement loading, error, empty, and offline states.
+- Verify that provider-specific behavior stays inside the correct adapter.
+
+### Phase 5 — Quality assurance
+
+- Run type checking.
+- Run linting when configured.
+- Run relevant automated tests.
+- Build the production bundle.
+- Fix errors and regressions.
+- Test RTL and LTR behavior.
+- Test responsive layouts.
+- Verify keyboard accessibility.
+- Test the documented static deployment path.
+
+Do not stop after creating a visual prototype when the task requires a working implementation.
+
+Do not rewrite working application logic merely to match a suggested directory structure.
+
+## 19. ACCEPTANCE CRITERIA
+
+The frontend is considered complete only when the implemented scope satisfies the following criteria:
+
+- [ ] Arabic is the initial default language.
+- [ ] English is fully supported.
+- [ ] RTL and LTR layouts work correctly.
+- [ ] Cairo is applied consistently.
+- [ ] The specified color palette is used through semantic tokens.
+- [ ] The application has a consistent, responsive layout.
+- [ ] Dashboard, tasks, projects, calendar, and settings are implemented according to the supported scope.
+- [ ] The Setup Wizard guides users through valid configuration choices.
+- [ ] Incompatible storage and deployment combinations are handled honestly.
+- [ ] UI components do not depend directly on database-specific implementations.
+- [ ] Supported local data persists after page reloads.
+- [ ] Remote operations use the appropriate API or backend.
+- [ ] No privileged credentials are exposed in frontend assets.
+- [ ] Forms, dialogs, navigation, filters, and primary actions work.
+- [ ] Loading, empty, success, error, and applicable offline states are implemented.
+- [ ] Destructive operations are handled safely.
+- [ ] The interface works on mobile, tablet, and desktop.
+- [ ] Keyboard navigation and accessibility have been tested.
+- [ ] Type checking and the production build pass.
+- [ ] Deployment instructions match the actual implementation.
+- [ ] No fabricated connection, synchronization, migration, or persistence success is displayed.
+
+## 20. FINAL EXECUTION RULE
+
+Prioritize functional correctness, architectural consistency, accessibility, and visual quality equally.
+
+Use the provided product specification to determine what TaskDo must do. Use these instructions to determine how its frontend should be designed and implemented.
+
+Make reasonable implementation decisions without repeatedly asking questions that can be resolved by inspecting the repository or following the documented architecture.
+
+When a requirement cannot be completed because a backend, credential, external service, or missing dependency is unavailable, implement the appropriate frontend boundary and clearly document the remaining requirement.
+
+At completion, report:
+
+1. What was implemented.
+2. Which application workflows are functional.
+3. Which integrations require external configuration.
+4. Which tests and build commands were executed.
+5. Any remaining limitations or known issues.
+
+Never claim that a feature, test, migration, or deployment works unless it has actually been implemented and verified.

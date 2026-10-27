@@ -1,0 +1,7 @@
+{
+  "name": "TaskDo - Modern Multi-Storage Task Manager",
+  "description": "TaskDo is a modern, extensible, offline-first task management application supporting Arabic and English, multiple storage providers, and clean project workflows.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
