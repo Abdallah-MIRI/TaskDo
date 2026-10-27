@@ -21,7 +21,7 @@
 ## Installation
 
 ```bash
-git clone <REPO_URL>
+git clone https://github.com/Abdallah-MIRI/TaskDo.git
 cd TaskDo
 npm install
 ```
@@ -30,22 +30,21 @@ npm install
 
 ```bash
 npm run dev
-
+```
 
 ## Scripts
 
-| Script | Command |
-|--------|---------|
-| `dev` | `vite --port=3000 --host=0.0.0.0` |
-| `build` | `vite build` |
-| `preview` | `vite preview` |
-| `clean` | `rm -rf dist server.js` |
-| `lint` | `tsc --noEmit` |
+| Script    | Command                           |
+| --------- | --------------------------------- |
+| `dev`     | `vite --port=3000 --host=0.0.0.0` |
+| `build`   | `vite build`                      |
+| `preview` | `vite preview`                    |
+| `clean`   | `rm -rf dist server.js`           |
+| `lint`    | `tsc --noEmit`                    |
 
 ## Project structure
 
 ```
-
 .
 ├── public
 │ └── assets
@@ -104,33 +103,38 @@ npm run dev
 ├── tsconfig.json
 └── vite.config.ts
 
-````
+```
 
 ## Modules
 
 ### `App.tsx` — Source
+
 - Exports: `App` (function)
 
 ### `components/` — UI components
+
 - Files: 14 (14 code)
 - Examples: `CalendarView.tsx`, `ConfirmModal.tsx`, `DashboardView.tsx`, `MobileNav.tsx`, `Navbar.tsx`
 
 ### `domain/` — Module
+
 - Files: 2 (2 code)
 - Examples: `task-rules.test.ts`, `task-rules.ts`
 
 ### `i18n/` — i18n
+
 - Files: 2 (2 code)
 - Examples: `context.tsx`, `translations.ts`
 
 ### `main.tsx` — Entry
 
-
 ### `storage/` — Module
+
 - Files: 6 (6 code)
 - Examples: `contracts.ts`, `indexeddb-adapter.ts`, `localstorage-adapter.ts`, `remote-adapters.ts`, `seed-data.ts`
 
 ### `types/` — Type definitions
+
 - Files: 1 (1 code)
 - Examples: `index.ts`
 
@@ -140,23 +144,23 @@ _No routes detected._
 
 ## Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| `App` | `src\App.tsx` | — |
-| `CalendarView` | `src\components\calendar\CalendarView.tsx` | — |
-| `DashboardView` | `src\components\dashboard\DashboardView.tsx` | — |
-| `TaskStatistics` | `src\components\dashboard\TaskStatistics.tsx` | — |
-| `MobileNav` | `src\components\layout\MobileNav.tsx` | — |
-| `Navbar` | `src\components\layout\Navbar.tsx` | — |
-| `Sidebar` | `src\components\layout\Sidebar.tsx` | — |
-| `ProjectModal` | `src\components\projects\ProjectModal.tsx` | — |
-| `ProjectsView` | `src\components\projects\ProjectsView.tsx` | — |
-| `SettingsView` | `src\components\settings\SettingsView.tsx` | — |
-| `TaskModal` | `src\components\tasks\TaskModal.tsx` | — |
-| `TasksView` | `src\components\tasks\TasksView.tsx` | — |
-| `ConfirmModal` | `src\components\ui\ConfirmModal.tsx` | — |
-| `ToastProvider` | `src\components\ui\ToastProvider.tsx` | — |
-| `SetupWizardModal` | `src\components\wizard\SetupWizardModal.tsx` | — |
+| Component          | File                                          | Description |
+| ------------------ | --------------------------------------------- | ----------- |
+| `App`              | `src\App.tsx`                                 | —           |
+| `CalendarView`     | `src\components\calendar\CalendarView.tsx`    | —           |
+| `DashboardView`    | `src\components\dashboard\DashboardView.tsx`  | —           |
+| `TaskStatistics`   | `src\components\dashboard\TaskStatistics.tsx` | —           |
+| `MobileNav`        | `src\components\layout\MobileNav.tsx`         | —           |
+| `Navbar`           | `src\components\layout\Navbar.tsx`            | —           |
+| `Sidebar`          | `src\components\layout\Sidebar.tsx`           | —           |
+| `ProjectModal`     | `src\components\projects\ProjectModal.tsx`    | —           |
+| `ProjectsView`     | `src\components\projects\ProjectsView.tsx`    | —           |
+| `SettingsView`     | `src\components\settings\SettingsView.tsx`    | —           |
+| `TaskModal`        | `src\components\tasks\TaskModal.tsx`          | —           |
+| `TasksView`        | `src\components\tasks\TasksView.tsx`          | —           |
+| `ConfirmModal`     | `src\components\ui\ConfirmModal.tsx`          | —           |
+| `ToastProvider`    | `src\components\ui\ToastProvider.tsx`         | —           |
+| `SetupWizardModal` | `src\components\wizard\SetupWizardModal.tsx`  | —           |
 
 ## Dependencies
 
@@ -192,7 +196,7 @@ _No routes detected._
 
 ```bash
 npm run build
-````
+```
 
 **Deploy:** Upload `build/` to Vercel/Netlify/S3.
 
